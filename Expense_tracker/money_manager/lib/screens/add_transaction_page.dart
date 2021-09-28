@@ -70,45 +70,6 @@ class _Add_TransactionState extends State<Add_Transaction> {
     );
   }
 
-  // Widget _buildName() {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-  //     child: TextFormField(
-  //       controller: namecontroller,
-  //       decoration: InputDecoration(
-  //           labelStyle: const TextStyle(color: Colors.white),
-  //           border: const OutlineInputBorder(
-  //             borderRadius: BorderRadius.all(Radius.circular(10)),
-  //           ),
-  //           suffixIcon: IconButton(
-  //             icon: const Icon(Icons.close),
-  //             onPressed: () {
-  //               namecontroller.clear();
-  //             },
-  //           ),
-  //           labelText: 'Transaction Name',
-  //           focusedBorder: const OutlineInputBorder(
-  //             borderSide: BorderSide(color: Colors.white),
-  //           )),
-  //       maxLength: 20,
-  //       validator: (value) {
-  //         if (value!.isEmpty) {
-  //           return 'Category Name is required';
-  //         }
-
-  //         for (int i = 0; i < box.length; i++) {
-  //           if (box.getAt(i)!.categoryName == value) {
-  //             return 'Category Name already exists';
-  //           }
-  //         }
-  //       },
-  //       onSaved: (value) {
-  //         categoryName = value.toString();
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget _buildAmount() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -126,7 +87,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
               Amountcontroller.clear();
             },
           ),
-          labelText: 'Budget',
+          labelText: 'Money Spent',
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
           ),
@@ -136,7 +97,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
         maxLength: 20,
         validator: (value) {
           if (value!.isEmpty) {
-            return 'Budget is required';
+            return 'Field cannot be empty';
           }
         },
         onSaved: (value) {
@@ -240,5 +201,8 @@ class _Add_TransactionState extends State<Add_Transaction> {
 }
 
 getCurrentDate() {
-  return DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+  // return DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+  final DateFormat formatter = DateFormat('MM/dd/yyyy');
+  String createDate = formatter.format(DateTime.now());
+  return createDate;
 }

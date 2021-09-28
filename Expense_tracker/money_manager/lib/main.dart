@@ -17,6 +17,7 @@ Future<void> main() async {
   Hive.registerAdapter(CategoryAdapter());
   await Hive.openBox<Category>('categories');
   await Hive.openBox<TransactionModel>('transactions');
+
   Box categories = Hive.box<Category>('categories');
   await add_default_categories(categories);
   runApp(MyApp());
