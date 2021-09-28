@@ -29,12 +29,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: 7.2.0
+  flutter_bloc:
   hive:
   hive_flutter:
   equatable:
-
-
+  flutter_colorpicker: ^0.6.0
+  intl:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
