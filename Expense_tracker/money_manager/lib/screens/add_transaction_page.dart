@@ -36,9 +36,8 @@ class _Add_TransactionState extends State<Add_Transaction> {
         (e) => e.categoryName,
       )
       .toList();
-
+  int temp1 = 1;
   Widget _buildDropdownButton() {
-    print(item1);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Container(
@@ -46,7 +45,8 @@ class _Add_TransactionState extends State<Add_Transaction> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey, width: 1),
+          border:
+              Border.all(color: temp1 > 0 ? Colors.grey : Colors.red, width: 1),
         ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
@@ -99,6 +99,9 @@ class _Add_TransactionState extends State<Add_Transaction> {
           if (value!.isEmpty) {
             return 'Field cannot be empty';
           }
+          if (transactionCategory == null) {
+            return 'Please select a category';
+          }
         },
         onSaved: (value) {
           transactionAmount = double.parse(value!);
@@ -107,7 +110,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
     );
   }
 
-  Widget _buildcategoryDescription() {
+  Widget _buildTransactionDescription() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: TextFormField(
@@ -117,7 +120,42 @@ class _Add_TransactionState extends State<Add_Transaction> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            labelText: 'Category Description',
+            labelText: 'Transaction Description',
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                Descriptioncontroller.clear();
+              },
+            ),
+            focusColor: Colors.white,
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            )),
+        maxLength: 50,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Transaction Name is required';
+          }
+        },
+        onSaved: (value) {
+          transactionDescription = value.toString();
+        },
+        style: const TextStyle(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildtransactionDate() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: Descriptioncontroller,
+        decoration: InputDecoration(
+            labelStyle: const TextStyle(color: Colors.white),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            labelText: 'Transaction Description',
             suffixIcon: IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
@@ -142,6 +180,25 @@ class _Add_TransactionState extends State<Add_Transaction> {
     );
   }
 
+  Future pickDate(BuildContext context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+    if (newDate != null) {
+      setState(() {
+        transactionDate = getCurrentDate(newDate);
+      });
+    } else {
+      setState(() {
+        transactionDate = getCurrentDate(initialDate);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +213,23 @@ class _Add_TransactionState extends State<Add_Transaction> {
               const SizedBox(height: 20),
               _buildAmount(),
               const SizedBox(height: 20),
-              _buildcategoryDescription(),
+              _buildTransactionDescription(),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFF11D8C5)),
+                      shape: MaterialStateProperty.all(
+                          const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ))),
+                  onPressed: () {
+                    pickDate(context);
+                  },
+                  child: const Text(
+                    "Date",
+                    style: TextStyle(color: Colors.black),
+                  )),
               const SizedBox(height: 20),
               ElevatedButton(
                   child: const Text(
@@ -174,8 +247,10 @@ class _Add_TransactionState extends State<Add_Transaction> {
                       shadowColor: MaterialStateProperty.all<Color>(
                           const Color(0xFF86EBE1))),
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate() &&
+                        (transactionCategory != null)) {
                       _formKey.currentState!.save();
+                      temp1 = 1;
                       // box.add(Category(
                       //     categoryName: categoryName,
                       //     categoryDescription: categoryDescription,
@@ -186,23 +261,24 @@ class _Add_TransactionState extends State<Add_Transaction> {
                               transaction: TransactionModel(
                         transactionAmount: transactionAmount,
                         transactionCategory: transactionCategory.toString(),
-                        transactionDate: getCurrentDate(),
+                        transactionDate: transactionDate,
                         transactionDescription: transactionDescription,
                         transactionColor: Color(0xFF29BF72).value,
                       )));
-                      print(transactionAmount);
-                      print(transactionDescription);
-                      print(transactionCategory);
+                      print(transactionDate);
                       Navigator.pop(context);
+                    } else if (transactionCategory == null) {
+                      setState(() {
+                        temp1 = -1;
+                      });
                     }
                   })
             ])));
   }
 }
 
-getCurrentDate() {
-  // return DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
-  final DateFormat formatter = DateFormat('MM/dd/yyyy');
-  String createDate = formatter.format(DateTime.now());
+getCurrentDate(var a) {
+  final DateFormat formatter = DateFormat('dd/MM/yyyy');
+  String createDate = formatter.format(a);
   return createDate;
 }

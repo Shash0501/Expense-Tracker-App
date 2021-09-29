@@ -4,6 +4,8 @@ import 'package:hive/hive.dart';
 import 'package:money_manager/blocs/Category_bloc/category_bloc.dart';
 import 'package:money_manager/models/category_model.dart';
 
+import 'categories_page.dart';
+
 var box = Hive.box<Category>('categories');
 
 class Add_Category extends StatefulWidget {
@@ -177,12 +179,17 @@ class _Add_CategoryState extends State<Add_Category> {
                               categoryName: categoryName,
                               categoryDescription: categoryDescription,
                               budget: budget,
-                              categoryColor: Color(0xFF0C5851).value),
+                              categoryColor: Color(0xFFF4ED1C).value),
                           box: box));
-                      print(categoryName);
-                      print(budget);
-                      print(categoryDescription);
-                      Navigator.pop(context);
+                      // print(categoryName);
+                      // print(budget);
+                      // print(categoryDescription);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                  value: CategoryBloc(),
+                                  child: CategoriesPage())));
                     }
                   })
             ])));

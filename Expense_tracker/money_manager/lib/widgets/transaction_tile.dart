@@ -69,17 +69,17 @@ void showSimpleDialog(BuildContext context, String a, double b, String c) =>
                 style: TextStyle(fontSize: 45),
               ),
               children: <Widget>[
-                Divider(
+                const Divider(
                   color: Colors.black,
                   thickness: 1,
                 ),
-                SizedBox(height: 7),
+                const SizedBox(height: 7),
                 Text(
                   "Amount - ${b.toString()}",
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
-                SizedBox(height: 10),
-                Text("Date - $c ", style: TextStyle(fontSize: 20)),
-                SizedBox(height: 10)
+                const SizedBox(height: 10),
+                Text("Date - $c ", style: const TextStyle(fontSize: 20)),
+                const SizedBox(height: 10)
               ]);
         });

@@ -13,4 +13,9 @@ class AddCategory extends CategoryEvent {
   AddCategory({required this.category, required this.box});
 }
 
-class testevent extends CategoryEvent {}
+class Testevent extends CategoryEvent {}
+
+class CategoryTabChanged extends CategoryEvent {
+  String name;
+  CategoryTabChanged({required this.name});
+}

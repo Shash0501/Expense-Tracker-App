@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:money_manager/screens/categories_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/screens/landing_page.dart';
 import 'package:money_manager/services/category_services.dart';
@@ -20,7 +19,7 @@ Future<void> main() async {
 
   Box categories = Hive.box<Category>('categories');
   await add_default_categories(categories);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -33,7 +32,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    print("hekllo1");
+    // print("hekllo1");
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
