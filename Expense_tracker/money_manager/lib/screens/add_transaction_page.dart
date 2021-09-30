@@ -265,9 +265,8 @@ class _Add_TransactionState extends State<Add_Transaction> {
 
                       int date = int.parse(transactionDate.split('/')[0]);
                       int month = int.parse(transactionDate.split('/')[1]);
-                      BlocProvider.of<TransactionBloc>(context)
-                          .add(DateWiseTransaction(date: date, month: month));
-                      Navigator.pop(context);
+
+                      Navigator.pop(context, true);
                     } else if (transactionCategory == null) {
                       setState(() {
                         temp1 = -1;

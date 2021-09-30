@@ -87,11 +87,32 @@ class _LandingPageState extends State<LandingPage> {
     BlocProvider.of<TransactionBloc>(context).add(DateWiseTransaction(
         date: DateTime.now().day, month: DateTime.now().month));
     days = (daysInMonth(2021, Months.indexOf(month) + 1));
+    print("hi");
     DatesList.clear();
     for (int i = 1; i <= days; i++) {
       DatesList.add(i.toString());
     }
     super.initState();
+  }
+
+  _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BlocProvider.value(
+                  value: TransactionBloc(),
+                  child: const Add_Transaction(),
+                )));
+
+    //below you can get your result and update the view with setState
+    //changing the value if you want, i just wanted know if i have to
+    //update, and if is true, reload state
+
+    if (result) {
+      BlocProvider.of<TransactionBloc>(context).add(DateWiseTransaction(
+          date: DateTime.now().day, month: Months.indexOf(month) + 1));
+      setState(() {});
+    }
   }
 
   @override
@@ -135,19 +156,20 @@ class _LandingPageState extends State<LandingPage> {
         ),
         body: BlocBuilder<TransactionBloc, TransactionState>(
           builder: (context, state) {
+            print(state);
             if (state is DateWiseTransactionLoaded) {
               return ListView.builder(
                   itemCount: state.transactions.length,
                   itemBuilder: (context, index) {
                     TransactionModel Transaction = state.transactions[index];
                     return TransactionTile(
-                      transactionAmount: Transaction.transactionAmount,
-                      transactionCategory: Transaction.transactionCategory,
-                      transactionDate: Transaction.transactionDate,
-                      transactionDescription:
-                          Transaction.transactionDescription,
-                      transactionColor: Transaction.transactionColor,
-                    );
+                        transactionAmount: Transaction.transactionAmount,
+                        transactionCategory: Transaction.transactionCategory,
+                        transactionDate: Transaction.transactionDate,
+                        transactionDescription:
+                            Transaction.transactionDescription,
+                        transactionColor: Transaction.transactionColor,
+                        index: index);
                   });
             } else {
               return const Center(child: CircularProgressIndicator());
@@ -178,17 +200,9 @@ class _LandingPageState extends State<LandingPage> {
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BlocProvider.value(
-                            value: TransactionBloc(),
-                            child: const Add_Transaction(),
-                          )));
+              _navigateAndDisplaySelection(context);
             }),
       ),
     );
   }
 }
-
-void Show_MonthPicker(BuildContext context) {}

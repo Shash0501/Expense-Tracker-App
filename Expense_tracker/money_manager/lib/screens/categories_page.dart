@@ -192,6 +192,7 @@ Widget buildTransactionList(
         itemBuilder: (context, index) {
           TransactionModel transactionModel = transactionlist[index];
           return TransactionTile(
+            index: index,
             transactionAmount: transactionModel.transactionAmount,
             transactionCategory: transactionModel.transactionCategory,
             transactionDate: transactionModel.transactionDate,

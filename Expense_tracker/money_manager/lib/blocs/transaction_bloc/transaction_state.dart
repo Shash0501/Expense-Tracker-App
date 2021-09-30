@@ -15,3 +15,5 @@ class DateWiseTransactionLoaded extends TransactionState implements Equatable {
   @override
   List<Object> get props => [transactions];
 }
+
+class RefreshState extends TransactionState {}

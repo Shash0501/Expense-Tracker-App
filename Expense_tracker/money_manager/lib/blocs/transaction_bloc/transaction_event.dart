@@ -19,3 +19,5 @@ class DateWiseTransaction extends TransactionEvent {
   int month;
   DateWiseTransaction({required this.date, required this.month});
 }
+
+class RefreshEvent extends TransactionEvent {}

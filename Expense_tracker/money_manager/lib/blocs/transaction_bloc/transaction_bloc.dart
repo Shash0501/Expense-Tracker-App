@@ -24,9 +24,10 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
             return false;
           }
         }).toList();
-        print("hello");
 
         emit(DateWiseTransactionLoaded(transactions: list));
+      } else if (event is RefreshEvent) {
+        emit(RefreshState());
       }
     });
   }

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:money_manager/models/transaction_model.dart';
 
 class TransactionTile extends StatelessWidget {
   double transactionAmount;
+  int index;
   String transactionCategory;
   String transactionDate;
   String transactionDescription;
   int transactionColor;
   TransactionTile(
-      {required this.transactionAmount,
+      {required this.index,
+      required this.transactionAmount,
       required this.transactionCategory,
       required this.transactionColor,
       required this.transactionDate,
@@ -41,6 +45,11 @@ class TransactionTile extends StatelessWidget {
                 flex: 1,
               ),
               Text(transactionAmount.toString()),
+              IconButton(
+                  onPressed: () {
+                    Hive.box<TransactionModel>('transactions').deleteAt(index);
+                  },
+                  icon: Icon(Icons.delete)),
               IconButton(
                   icon: const Icon(Icons.open_in_new),
                   onPressed: () => showSimpleDialog(
