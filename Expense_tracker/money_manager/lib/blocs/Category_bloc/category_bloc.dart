@@ -12,7 +12,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   var tbox = Hive.box<TransactionModel>('transactions');
   CategoryBloc() : super(CategoryInitial()) {
     on<CategoryEvent>((event, emit) {
-      // TODO: implement event handler
       if (event is AddCategory) {
         event.box.add(event.category);
         emit(state);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:money_manager/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:money_manager/models/transaction_model.dart';
 
 class TransactionTile extends StatelessWidget {

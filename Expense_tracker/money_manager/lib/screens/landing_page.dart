@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -9,6 +10,7 @@ import 'package:money_manager/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:money_manager/models/transaction_model.dart';
 import 'package:money_manager/screens/add_transaction_page.dart';
 import 'package:money_manager/screens/categories_page.dart';
+import 'package:money_manager/screens/stats_page.dart';
 import 'package:money_manager/widgets/transaction_tile.dart';
 import 'package:quiver/time.dart';
 
@@ -149,14 +151,26 @@ class _LandingPageState extends State<LandingPage> {
         ),
         body: Column(
           children: [
-            SizedBox(
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  // shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  child: TransactionTotalTile(context)),
+            BlocBuilder<TransactionBloc, TransactionState>(
+              builder: (context, state) {
+                if (state is DateWiseTransactionLoaded) {
+                  var stats = getTotalAmount(state.transactions);
+                  return SizedBox(
+                    child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        // shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        child: TransactionTotalTile(context, stats)),
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 0,
+                    width: 0,
+                  );
+                }
+              },
             ),
-            Divider(),
+            // Divider(),
             BlocBuilder<TransactionBloc, TransactionState>(
               builder: (context, state) {
                 if (state is DateWiseTransactionLoaded) {
@@ -191,6 +205,14 @@ class _LandingPageState extends State<LandingPage> {
                     MaterialPageRoute(
                         builder: (context) => BlocProvider.value(
                             value: CategoryBloc(), child: CategoriesPage())));
+              } else if (index == 1) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                              value: TransactionBloc(),
+                              child: TransactionStatsPage(),
+                            )));
               }
             },
             items: const <BottomNavigationBarItem>[
@@ -214,8 +236,37 @@ class _LandingPageState extends State<LandingPage> {
   }
 }
 
-Widget TransactionTotalTile(BuildContext context) {
-  return const ExpansionTile(title: Text("Stats"), children: [
-    Text("Total Expense Today"),
-  ]);
+Widget TransactionTotalTile(BuildContext context, var stats) {
+  return ExpansionTile(
+    expandedCrossAxisAlignment: CrossAxisAlignment.end,
+    textColor: Colors.white,
+    iconColor: Colors.white,
+    childrenPadding: const EdgeInsets.fromLTRB(0.0, 0.0, 0, 0),
+    title: const Text("STATS"),
+    children: <Widget>[
+      ListTile(
+        minVerticalPadding: 0,
+        title: const Text('Total Amount Spent Today'),
+        trailing: Text(stats[0].toString(),
+            style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.white)),
+      ),
+      ListTile(
+        title: const Text('Transactions'),
+        trailing: Text(
+          stats[1].toString(),
+        ),
+      ),
+    ],
+  );
+}
+
+getTotalAmount(List<TransactionModel> transactions) {
+  double totalAmount = 0;
+  for (int i = 0; i < transactions.length; i++) {
+    totalAmount += transactions[i].transactionAmount;
+  }
+  return [totalAmount, transactions.length];
 }
