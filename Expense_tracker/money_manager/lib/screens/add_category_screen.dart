@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:money_manager/blocs/Category_bloc/category_bloc.dart';
-import 'package:money_manager/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:money_manager/models/category_model.dart';
 
 import 'categories_page.dart';
@@ -164,7 +163,7 @@ class _Add_CategoryState extends State<Add_Category> {
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color(0xFF11D8C5)),
                       minimumSize:
-                          MaterialStateProperty.all<Size>(Size(200, 50)),
+                          MaterialStateProperty.all<Size>(const Size(200, 50)),
                       shadowColor: MaterialStateProperty.all<Color>(
                           const Color(0xFF86EBE1))),
                   onPressed: () {
@@ -180,7 +179,7 @@ class _Add_CategoryState extends State<Add_Category> {
                               categoryName: categoryName,
                               categoryDescription: categoryDescription,
                               budget: budget,
-                              categoryColor: Color(0xFFF4ED1C).value),
+                              categoryColor: const Color(0xFFF4ED1C).value),
                           box: box));
                       // print(categoryName);
                       // print(budget);

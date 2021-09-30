@@ -4,13 +4,13 @@ import 'package:money_manager/models/transaction_model.dart';
 
 class TransactionTile extends StatelessWidget {
   double transactionAmount;
-  int index;
   String transactionCategory;
   String transactionDate;
   String transactionDescription;
   int transactionColor;
+  String transactionId;
   TransactionTile(
-      {required this.index,
+      {required this.transactionId,
       required this.transactionAmount,
       required this.transactionCategory,
       required this.transactionColor,
@@ -18,8 +18,9 @@ class TransactionTile extends StatelessWidget {
       required this.transactionDescription});
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box<TransactionModel>('transactions');
     return Card(
-      color: Color(0x2B000000),
+      color: const Color(0x2B000000),
       elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Padding(
@@ -47,9 +48,9 @@ class TransactionTile extends StatelessWidget {
               Text(transactionAmount.toString()),
               IconButton(
                   onPressed: () {
-                    Hive.box<TransactionModel>('transactions').deleteAt(index);
+                    showAlertDialog(context, box, transactionId);
                   },
-                  icon: Icon(Icons.delete)),
+                  icon: const Icon(Icons.delete)),
               IconButton(
                   icon: const Icon(Icons.open_in_new),
                   onPressed: () => showSimpleDialog(
@@ -61,6 +62,33 @@ class TransactionTile extends StatelessWidget {
       ),
     );
   }
+}
+
+void showAlertDialog(BuildContext context, var box, String transactionId) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: const Text(
+                'Are you sure you want to delete this Transaction ?'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    for (int i = 0; i < box.length; i++) {
+                      if (box.getAt(i)!.transactionid == transactionId) {
+                        box.deleteAt(i);
+                      }
+                    }
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No')),
+            ]);
+      });
 }
 
 // a = transactionDescription
@@ -78,7 +106,7 @@ void showSimpleDialog(BuildContext context, String a, double b, String c) =>
               title: Text(
                 a.toString(),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 45),
+                style: const TextStyle(fontSize: 45),
               ),
               children: <Widget>[
                 const Divider(

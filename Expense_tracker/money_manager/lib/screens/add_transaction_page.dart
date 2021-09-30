@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:money_manager/blocs/Category_bloc/category_bloc.dart';
 import 'package:money_manager/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:money_manager/models/category_model.dart';
 import 'package:money_manager/models/transaction_model.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 var box = Hive.box<TransactionModel>('transactions');
 var categorybox = Hive.box<Category>('categories');
@@ -23,6 +23,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
   late String transactionDate = getCurrentDate(DateTime.now());
   late String transactionDescription;
   late int transactionColor;
+  late String transactionid;
   // String temp = "Select Category";
   // late int TransactionColor;
   // listCategories = [];
@@ -145,41 +146,6 @@ class _Add_TransactionState extends State<Add_Transaction> {
     );
   }
 
-  Widget _buildtransactionDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextFormField(
-        controller: Descriptioncontroller,
-        decoration: InputDecoration(
-            labelStyle: const TextStyle(color: Colors.white),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            labelText: 'Transaction Description',
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Descriptioncontroller.clear();
-              },
-            ),
-            focusColor: Colors.white,
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-            )),
-        maxLength: 50,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Category Name is required';
-          }
-        },
-        onSaved: (value) {
-          transactionDescription = value.toString();
-        },
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
-  }
-
   Future pickDate(BuildContext context) async {
     final initialDate = DateTime.now();
     final newDate = await showDatePicker(
@@ -201,6 +167,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
 
   @override
   Widget build(BuildContext context) {
+    var uuid = Uuid();
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Category'),
@@ -256,16 +223,13 @@ class _Add_TransactionState extends State<Add_Transaction> {
                       BlocProvider.of<TransactionBloc>(context)
                           .add(AddTransaction(
                               transaction: TransactionModel(
+                        transactionid: uuid.v1(),
                         transactionAmount: transactionAmount,
                         transactionCategory: transactionCategory.toString(),
                         transactionDate: transactionDate,
                         transactionDescription: transactionDescription,
                         transactionColor: const Color(0xFF29BF72).value,
                       )));
-
-                      int date = int.parse(transactionDate.split('/')[0]);
-                      int month = int.parse(transactionDate.split('/')[1]);
-
                       Navigator.pop(context, true);
                     } else if (transactionCategory == null) {
                       setState(() {

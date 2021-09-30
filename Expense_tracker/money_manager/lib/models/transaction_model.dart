@@ -18,10 +18,14 @@ class TransactionModel {
   @HiveField(4)
   int transactionColor;
 
+  @HiveField(5)
+  String transactionid;
+
   TransactionModel(
       {required this.transactionAmount,
       required this.transactionCategory,
       required this.transactionDate,
       required this.transactionDescription,
-      required this.transactionColor});
+      required this.transactionColor,
+      required this.transactionid});
 }

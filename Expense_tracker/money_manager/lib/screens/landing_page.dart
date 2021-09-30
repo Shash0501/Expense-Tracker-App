@@ -4,7 +4,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/constants/months.dart';
 import 'package:money_manager/constants/text_styles.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:money_manager/blocs/Category_bloc/category_bloc.dart';
 import 'package:money_manager/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:money_manager/models/transaction_model.dart';
@@ -87,7 +86,6 @@ class _LandingPageState extends State<LandingPage> {
     BlocProvider.of<TransactionBloc>(context).add(DateWiseTransaction(
         date: DateTime.now().day, month: DateTime.now().month));
     days = (daysInMonth(2021, Months.indexOf(month) + 1));
-    print("hi");
     DatesList.clear();
     for (int i = 1; i <= days; i++) {
       DatesList.add(i.toString());
@@ -103,11 +101,6 @@ class _LandingPageState extends State<LandingPage> {
                   value: TransactionBloc(),
                   child: const Add_Transaction(),
                 )));
-
-    //below you can get your result and update the view with setState
-    //changing the value if you want, i just wanted know if i have to
-    //update, and if is true, reload state
-
     if (result) {
       BlocProvider.of<TransactionBloc>(context).add(DateWiseTransaction(
           date: DateTime.now().day, month: Months.indexOf(month) + 1));
@@ -154,27 +147,41 @@ class _LandingPageState extends State<LandingPage> {
                     )).toList()),
           ),
         ),
-        body: BlocBuilder<TransactionBloc, TransactionState>(
-          builder: (context, state) {
-            print(state);
-            if (state is DateWiseTransactionLoaded) {
-              return ListView.builder(
-                  itemCount: state.transactions.length,
-                  itemBuilder: (context, index) {
-                    TransactionModel Transaction = state.transactions[index];
-                    return TransactionTile(
-                        transactionAmount: Transaction.transactionAmount,
-                        transactionCategory: Transaction.transactionCategory,
-                        transactionDate: Transaction.transactionDate,
-                        transactionDescription:
-                            Transaction.transactionDescription,
-                        transactionColor: Transaction.transactionColor,
-                        index: index);
-                  });
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+        body: Column(
+          children: [
+            SizedBox(
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  // shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  child: TransactionTotalTile(context)),
+            ),
+            Divider(),
+            BlocBuilder<TransactionBloc, TransactionState>(
+              builder: (context, state) {
+                if (state is DateWiseTransactionLoaded) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.transactions.length,
+                      itemBuilder: (context, index) {
+                        TransactionModel Transaction =
+                            state.transactions[index];
+                        return TransactionTile(
+                            transactionAmount: Transaction.transactionAmount,
+                            transactionCategory:
+                                Transaction.transactionCategory,
+                            transactionDate: Transaction.transactionDate,
+                            transactionDescription:
+                                Transaction.transactionDescription,
+                            transactionColor: Transaction.transactionColor,
+                            transactionId: Transaction.transactionid);
+                      });
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ],
         ),
         bottomNavigationBar: BottomNavigationBar(
             onTap: (index) {
@@ -205,4 +212,10 @@ class _LandingPageState extends State<LandingPage> {
       ),
     );
   }
+}
+
+Widget TransactionTotalTile(BuildContext context) {
+  return const ExpansionTile(title: Text("Stats"), children: [
+    Text("Total Expense Today"),
+  ]);
 }

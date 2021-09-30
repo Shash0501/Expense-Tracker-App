@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/blocs/Category_bloc/category_bloc.dart';
-import 'package:money_manager/blocs/Transaction_bloc/transaction_bloc.dart';
 
 import 'package:money_manager/models/category_model.dart';
 import 'package:money_manager/models/transaction_model.dart';
@@ -49,7 +48,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         appBar: AppBar(
           title: const Text("Categories"),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(30.0),
+            preferredSize: const Size.fromHeight(30.0),
             child: TabBar(
                 onTap: (index) {
                   _CategoryBloc.add(CategoryTabChanged(
@@ -66,8 +65,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
           builder: (context, state) {
             if (state is CategoryTabLoaded) {
               return buildTransactionList(context, state.transactions);
-            } else
+            } else {
               return Container();
+            }
           },
         ),
         floatingActionButton: FloatingActionButton(
@@ -192,7 +192,7 @@ Widget buildTransactionList(
         itemBuilder: (context, index) {
           TransactionModel transactionModel = transactionlist[index];
           return TransactionTile(
-            index: index,
+            transactionId: transactionModel.transactionid,
             transactionAmount: transactionModel.transactionAmount,
             transactionCategory: transactionModel.transactionCategory,
             transactionDate: transactionModel.transactionDate,

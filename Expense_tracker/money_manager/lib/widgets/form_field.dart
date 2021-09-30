@@ -4,6 +4,7 @@ import 'package:money_manager/models/category_model.dart';
 
 var box = Hive.box<Category>('categories');
 
+// ignore: unused_element
 Widget _buildName() {
   return TextFormField(
     decoration: const InputDecoration(
@@ -25,6 +26,7 @@ Widget _buildName() {
   );
 }
 
+// ignore: unused_element
 Widget _buildBudget() {
   return TextFormField(
     decoration: const InputDecoration(
@@ -46,6 +48,7 @@ Widget _buildBudget() {
   );
 }
 
+// ignore: unused_element
 Widget _buildcategoryDescription() {
   return TextFormField(
     decoration: const InputDecoration(
