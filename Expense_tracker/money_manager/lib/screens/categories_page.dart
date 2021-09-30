@@ -123,30 +123,63 @@ Widget buildTransactionList(
     Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-          ),
-          height: 100,
-          width: 100,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[700],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            height: 100,
+            width: 150,
             child: Column(
               children: [
-                Text(transactionlist.length.toString()),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  transactionlist.length.toString(),
+                  style: const TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 const Text("Transactions"),
               ],
             ),
           ),
         ),
-        Container(
-            child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(children: [
-            Text("$moneyspent Rs/-"),
-            const Text("Spent"),
-          ]),
-        )),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              height: 100,
+              width: 150,
+              decoration: BoxDecoration(
+                color: Colors.grey[700],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(children: [
+                const SizedBox(
+                  height: 4,
+                ),
+                FittedBox(
+                  child: Text(
+                    "$moneyspent",
+                    style: const TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Amount Spent"),
+              ])),
+        ),
       ],
     ),
     const SizedBox(

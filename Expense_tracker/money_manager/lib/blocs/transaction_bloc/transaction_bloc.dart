@@ -12,6 +12,21 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<TransactionEvent>((event, emit) {
       if (event is AddTransaction) {
         box.add(event.transaction);
+      } else if (event is DateWiseTransaction) {
+        int date1 = event.date;
+        int month1 = event.month;
+        List<TransactionModel> list = box.values.where((element) {
+          int date = int.parse(element.transactionDate.split('/')[0]);
+          int month = int.parse(element.transactionDate.split('/')[1]);
+          if (date == date1 && month == month1) {
+            return true;
+          } else {
+            return false;
+          }
+        }).toList();
+        print("hello");
+
+        emit(DateWiseTransactionLoaded(transactions: list));
       }
     });
   }

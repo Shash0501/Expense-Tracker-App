@@ -37,6 +37,9 @@ class TransactionTile extends StatelessWidget {
                 ),
                 Text(transactionDate),
               ]),
+              const Spacer(
+                flex: 1,
+              ),
               Text(transactionAmount.toString()),
               IconButton(
                   icon: const Icon(Icons.open_in_new),

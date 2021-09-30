@@ -20,7 +20,7 @@ class Add_Transaction extends StatefulWidget {
 class _Add_TransactionState extends State<Add_Transaction> {
   late double transactionAmount;
   String? transactionCategory;
-  late String transactionDate;
+  late String transactionDate = getCurrentDate(DateTime.now());
   late String transactionDescription;
   late int transactionColor;
   // String temp = "Select Category";
@@ -215,7 +215,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
               const SizedBox(height: 20),
               _buildTransactionDescription(),
               const SizedBox(height: 20),
-              ElevatedButton(
+              ElevatedButton.icon(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color(0xFF11D8C5)),
@@ -226,9 +226,10 @@ class _Add_TransactionState extends State<Add_Transaction> {
                   onPressed: () {
                     pickDate(context);
                   },
-                  child: const Text(
-                    "Date",
-                    style: TextStyle(color: Colors.black),
+                  icon: const Icon(Icons.edit, color: Colors.black),
+                  label: Text(
+                    transactionDate.toString(),
+                    style: const TextStyle(color: Colors.black),
                   )),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -243,7 +244,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color(0xFF11D8C5)),
                       minimumSize:
-                          MaterialStateProperty.all<Size>(Size(200, 50)),
+                          MaterialStateProperty.all<Size>(const Size(200, 50)),
                       shadowColor: MaterialStateProperty.all<Color>(
                           const Color(0xFF86EBE1))),
                   onPressed: () {
@@ -251,11 +252,7 @@ class _Add_TransactionState extends State<Add_Transaction> {
                         (transactionCategory != null)) {
                       _formKey.currentState!.save();
                       temp1 = 1;
-                      // box.add(Category(
-                      //     categoryName: categoryName,
-                      //     categoryDescription: categoryDescription,
-                      //     budget: budget,
-                      //     categoryColor: Color(0xFF0C5851).value));
+
                       BlocProvider.of<TransactionBloc>(context)
                           .add(AddTransaction(
                               transaction: TransactionModel(
@@ -263,9 +260,13 @@ class _Add_TransactionState extends State<Add_Transaction> {
                         transactionCategory: transactionCategory.toString(),
                         transactionDate: transactionDate,
                         transactionDescription: transactionDescription,
-                        transactionColor: Color(0xFF29BF72).value,
+                        transactionColor: const Color(0xFF29BF72).value,
                       )));
-                      print(transactionDate);
+
+                      int date = int.parse(transactionDate.split('/')[0]);
+                      int month = int.parse(transactionDate.split('/')[1]);
+                      BlocProvider.of<TransactionBloc>(context)
+                          .add(DateWiseTransaction(date: date, month: month));
                       Navigator.pop(context);
                     } else if (transactionCategory == null) {
                       setState(() {

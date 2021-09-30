@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:money_manager/blocs/Category_bloc/category_bloc.dart';
+import 'package:money_manager/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:money_manager/models/category_model.dart';
 
 import 'categories_page.dart';
@@ -184,6 +185,7 @@ class _Add_CategoryState extends State<Add_Category> {
                       // print(categoryName);
                       // print(budget);
                       // print(categoryDescription);
+
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

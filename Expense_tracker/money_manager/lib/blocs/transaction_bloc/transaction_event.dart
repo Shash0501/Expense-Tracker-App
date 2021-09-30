@@ -13,3 +13,9 @@ class AddTransaction extends TransactionEvent {
   final TransactionModel transaction;
   AddTransaction({required this.transaction});
 }
+
+class DateWiseTransaction extends TransactionEvent {
+  int date;
+  int month;
+  DateWiseTransaction({required this.date, required this.month});
+}
