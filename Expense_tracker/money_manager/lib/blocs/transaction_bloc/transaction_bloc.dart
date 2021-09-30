@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:money_manager/constants/piedata.dart';
+import 'package:money_manager/models/category_model.dart';
 import 'package:money_manager/models/transaction_model.dart';
 
 part 'transaction_event.dart';
 part 'transaction_state.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
+  var cbox = Hive.box<Category>('categories');
   var box = Hive.box<TransactionModel>('transactions');
   TransactionBloc() : super(TransactionInitial()) {
     on<TransactionEvent>((event, emit) {
@@ -28,6 +31,29 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         emit(DateWiseTransactionLoaded(transactions: list));
       } else if (event is RefreshEvent) {
         emit(RefreshState());
+      } else if (event is GetStatsEvent) {
+        double totalExpense = 0;
+        Map<String, double> CategoryList = {};
+        List<int> categoryColor = [];
+        List<Data> pieData = [];
+
+        cbox.values.forEach((e) {
+          CategoryList[e.categoryName] = 0;
+          categoryColor.add(e.categoryColor);
+        });
+        box.values.forEach((e) {
+          totalExpense += e.transactionAmount;
+          double? a = CategoryList[e.transactionCategory];
+          CategoryList[e.transactionCategory] = e.transactionAmount + a!;
+        });
+        for (int i = 0; i < CategoryList.length; i++) {
+          pieData.add(Data(
+              CategoryColor: categoryColor[i],
+              CategoryExpense: CategoryList[cbox.getAt(i)!.categoryName]!,
+              CategoryName: cbox.getAt(i)!.categoryName));
+        }
+        PieData piedata = PieData(data: pieData);
+        emit(StatsLoaded(pieData: piedata, totalExpense: totalExpense));
       }
     });
   }

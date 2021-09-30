@@ -17,3 +17,9 @@ class DateWiseTransactionLoaded extends TransactionState implements Equatable {
 }
 
 class RefreshState extends TransactionState {}
+
+class StatsLoaded extends TransactionState {
+  PieData pieData;
+  double totalExpense;
+  StatsLoaded({required this.pieData, required this.totalExpense});
+}

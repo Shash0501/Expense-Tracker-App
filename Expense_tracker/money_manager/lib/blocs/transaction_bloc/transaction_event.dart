@@ -21,3 +21,5 @@ class DateWiseTransaction extends TransactionEvent {
 }
 
 class RefreshEvent extends TransactionEvent {}
+
+class GetStatsEvent extends TransactionEvent {}
